@@ -1,0 +1,128 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Student {
+    private String id;
+    private String name;
+    private int age;
+    private String grade;
+
+    public Student(String id, String name, int age, String grade) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.grade = grade;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + id + ", Name: " + name + ", Age: " + age + ", Grade: " + grade;
+    }
+}
+
+class StudentManagementSystem {
+    private List<Student> students = new ArrayList<>();
+    private Scanner scanner = new Scanner(System.in);
+
+    public void addStudent() {
+        System.out.print("Enter student ID: ");
+        String id = scanner.next();
+        System.out.print("Enter student name: ");
+        String name = scanner.next();
+        System.out.print("Enter student age: ");
+        int age = scanner.nextInt();
+        System.out.print("Enter student grade: ");
+        String grade = scanner.next();
+
+        Student student = new Student(id, name, age, grade);
+        students.add(student);
+        System.out.println("Student added successfully!");
+    }
+
+    public void viewAllStudents() {
+        if (students.isEmpty()) {
+            System.out.println("No students found.");
+        } else {
+            System.out.println("List of Students:");
+            for (Student student : students) {
+                System.out.println(student);
+            }
+        }
+    }
+
+    public void searchStudent() {
+        System.out.print("Enter student ID to search: ");
+        String searchId = scanner.next();
+        boolean found = false;
+        for (Student student : students) {
+            if (student.getId().equals(searchId)) {
+                System.out.println("Student found: " + student);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("Student not found.");
+        }
+    }
+
+    public void deleteStudent() {
+        System.out.print("Enter student ID to delete: ");
+        String deleteId = scanner.next();
+        boolean removed = false;
+        for (int i = 0; i < students.size(); i++) {
+            if (students.get(i).getId().equals(deleteId)) {
+                students.remove(i);
+                System.out.println("Student deleted successfully!");
+                removed = true;
+                break;
+            }
+        }
+        if (!removed) {
+            System.out.println("Student not found.");
+        }
+    }
+
+    public static void main(String[] args) {
+        StudentManagementSystem system = new StudentManagementSystem();
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("\nStudent Management System");
+            System.out.println("1. Add Student");
+            System.out.println("2. View All Students");
+            System.out.println("3. Search Student");
+            System.0ut.println("4. Delete Student");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    system.addStudent();
+                    break;
+                case 2:
+                    system.viewAllStudents();
+                    break;
+                case 3:
+                    system.searchStudent();
+                    break;
+                case 4:
+                    system.deleteStudent();
+                    break;
+                case 5:
+                    System.out.println("Exiting system.");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 5);
+        scanner.close();
+    }
+}
