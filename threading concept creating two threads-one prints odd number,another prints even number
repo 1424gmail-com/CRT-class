@@ -1,0 +1,77 @@
+class SharedPrinter {
+    private int number = 1;
+    private final int limit;
+
+    public SharedPrinter(int limit) {
+        this.limit = limit;
+    }
+
+    public synchronized void printOdd() {
+        while (number <= limit) {
+            if (number % 2 == 0) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+            System.out.println("Odd Thread: " + number);
+            number++;
+            notify();
+        }
+    }
+
+    public synchronized void printEven() {
+        while (number <= limit) {
+            if (number % 2 != 0) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+            System.out.println("Even Thread: " + number);
+            number++;
+            notify();
+        }
+    }
+}
+
+class OddThread implements Runnable {
+    private final SharedPrinter printer;
+
+    public OddThread(SharedPrinter printer) {
+        this.printer = printer;
+    }
+
+    @Override
+    public void run() {
+        printer.printOdd();
+    }
+}
+
+class EvenThread implements Runnable {
+    private final SharedPrinter printer;
+
+    public EvenThread(SharedPrinter printer) {
+        this.printer = printer;
+    }
+
+    @Override
+    public void run() {
+        printer.printEven();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        int limit = 10;
+        SharedPrinter printer = new SharedPrinter(limit);
+
+        Thread oddThread = new Thread(new OddThread(printer));
+        Thread evenThread = new Thread(new EvenThread(printer));
+
+        oddThread.start();
+        evenThread.start();
+    }
+}
