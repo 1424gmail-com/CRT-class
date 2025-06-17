@@ -1,0 +1,47 @@
+import java.util.HashMap;
+import java.util.Map;
+
+public class PhoneBook {
+    private Map<String, String> phoneBook;
+
+    public PhoneBook() {
+        this.phoneBook = new HashMap<>();
+    }
+
+    public void addContact(String name, String number) {
+        phoneBook.put(name, number);
+    }
+
+    public String getContact(String name) {
+        return phoneBook.get(name);
+    }
+
+    public void deleteContact(String name) {
+        phoneBook.remove(name);
+    }
+
+    public void updateContact(String name, String newNumber) {
+        phoneBook.put(name, newNumber);
+    }
+
+    public Map<String, String> getAllContacts() {
+        return phoneBook;
+    }
+
+    public String searchNameByNumber(String number) {
+        for (Map.Entry<String, String> entry : phoneBook.entrySet()) {
+            if (entry.getValue().equals(number)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        PhoneBook pb = new PhoneBook();
+        pb.addContact("John Doe", "123-456-7890");
+        pb.addContact("Jane Smith", "987-654-3210");
+        System.out.println(pb.getContact("John Doe")); // Output: 123-456-7890
+        System.out.println(pb.searchNameByNumber("987-654-3210")); // Output: Jane Smith
+    }
+}
